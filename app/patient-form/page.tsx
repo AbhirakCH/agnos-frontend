@@ -5,22 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { patientFormSchema, type PatientFormData } from "@/lib/validators";
 import { useEffect } from "react";
 
-/**
- * PatientForm Component
- * * This component handles the patient registration process.
- * * @architecture
- * - **State Management:** Uses `react-hook-form` for efficient re-renders and easy integration with Zod.
- * - **Validation:** Client-side validation using `zod` schema to ensure data integrity before submission.
- * - **Real-time Sync:** Observes form state changes to synchronize data with the Staff View via Pusher (WebSockets).
- * - **Responsiveness:** Mobile-first design using Tailwind CSS Grid.
- */
 export default function PatientForm() {
-  /**
-   * Initialize form with Zod resolver.
-   * * @ux-decision
-   * We use `mode: "onChange"` to provide immediate validation feedback to the user,
-   * improving the user experience by preventing submission errors early.
-   */
+  // Initialize form with Zod resolver
   const {
     register,
     handleSubmit,
@@ -31,12 +17,8 @@ export default function PatientForm() {
     mode: "onChange",
   });
 
-  /**
-   * Handles the final form submission.
-   * In a real scenario, this would POST data to a backend API and redirect upon success.
-   */
+  // Handle form submission
   const onSubmit = async (data: PatientFormData) => {
-    // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 1000));
     console.log("Form Submitted:", data);
     alert("Form submitted successfully!");
@@ -44,17 +26,30 @@ export default function PatientForm() {
 
   /**
    * Real-time Data Synchronization
-   * * Watches for any changes in the form fields and prepares to send updates.
-   * * @note
-   * In a high-traffic production environment, we should apply a **Debounce** function here
-   * (e.g., wait 300ms after the last keystroke) to prevent flooding the WebSocket/API
-   * with too many requests.
+   * Watches for any changes in the form fields and prepares to send updates.
    */
   useEffect(() => {
     const subscription = watch((value) => {
-      console.log("Real-time typing:", value);
-      // TODO (Step 4): Call Pusher API to sync data with Staff View
+      const timeoutId = setTimeout(async () => {
+        try {
+          await fetch("/api/sync-form", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              ...value,
+              status: "typing",
+              timestamp: new Date().toISOString(),
+            }),
+          });
+          console.log("Synced to staff view");
+        } catch (error) {
+          console.error("Sync failed:", error);
+        }
+      }, 500);
+
+      return () => clearTimeout(timeoutId);
     });
+
     return () => subscription.unsubscribe();
   }, [watch]);
 
@@ -66,7 +61,7 @@ export default function PatientForm() {
         </h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* --- Personal Information Section --- */}
+          {/* Personal Information Section */}
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -75,7 +70,7 @@ export default function PatientForm() {
               <input
                 {...register("firstName")}
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                placeholder="e.g. John"
+                placeholder="e.g. Elon"
               />
               {errors.firstName && (
                 <p className="text-red-500 text-xs mt-1">
@@ -102,7 +97,7 @@ export default function PatientForm() {
               <input
                 {...register("lastName")}
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                placeholder="e.g. Doe"
+                placeholder="e.g. Musk"
               />
               {errors.lastName && (
                 <p className="text-red-500 text-xs mt-1">
@@ -150,7 +145,7 @@ export default function PatientForm() {
 
           <hr className="border-gray-200" />
 
-          {/* --- Contact Details Section --- */}
+          {/* Contact Details Section */}
           <div className="space-y-6">
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div>
@@ -177,7 +172,7 @@ export default function PatientForm() {
                   type="email"
                   {...register("email")}
                   className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  placeholder="john@example.com"
+                  placeholder="elon@example.com"
                 />
                 {errors.email && (
                   <p className="text-red-500 text-xs mt-1">
@@ -237,7 +232,7 @@ export default function PatientForm() {
             </div>
           </div>
 
-          {/* --- Optional: Emergency Contact --- */}
+          {/* Optional: Emergency Contact */}
           <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
             <h3 className="text-lg font-medium text-gray-900 mb-4">
               Emergency Contact{" "}
