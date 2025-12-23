@@ -11,17 +11,36 @@ export default function PatientForm() {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<PatientFormData>({
     resolver: zodResolver(patientFormSchema),
     mode: "onChange",
   });
 
-  // Handle form submission
+  /**
+   * Handles the final form submission.
+   * Sends a "submitted" status to the Staff View via Pusher.
+   */
   const onSubmit = async (data: PatientFormData) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log("Form Submitted:", data);
-    alert("Form submitted successfully!");
+    try {
+      // Send the final form data to the server
+      await fetch("/api/sync-form", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...data,
+          status: "submitted", // Change status to "submitted"
+          timestamp: new Date().toISOString(),
+        }),
+      });
+
+      // Notify the patient
+      alert("Registration Submitted Successfully!");
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("Failed to submit form. Please try again.");
+    }
   };
 
   /**

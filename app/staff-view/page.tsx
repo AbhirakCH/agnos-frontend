@@ -122,20 +122,41 @@ export default function StaffView() {
                 </div>
               </div>
 
-              {/* Status Badge */}
+              {/* Status Badge Logic */}
               <div
-                className={`px-4 py-1.5 rounded-full text-sm font-semibold shadow-sm flex items-center gap-2 ${
+                className={`px-4 py-1.5 rounded-full text-sm font-semibold shadow-sm flex items-center gap-2 border ${
                   currentPatient.status === "typing"
-                    ? "bg-blue-50 text-blue-700 ring-1 ring-blue-700/10"
-                    : "bg-gray-100 text-gray-700"
+                    ? "bg-blue-50 text-blue-700 border-blue-200"
+                    : currentPatient.status === "submitted"
+                    ? "bg-green-50 text-green-700 border-green-200"
+                    : "bg-gray-100 text-gray-700 border-gray-200"
                 }`}
               >
+                {/* Icon: Typing (Animation) */}
                 {currentPatient.status === "typing" && (
                   <span className="relative flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
                   </span>
                 )}
+
+                {/* Icon: Submitted (Checkmark) */}
+                {currentPatient.status === "submitted" && (
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                )}
+
                 {currentPatient.status?.toUpperCase() || "ACTIVE"}
               </div>
             </div>
