@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Pusher from "pusher-js";
 import { type PatientFormData } from "@/lib/validators";
+import { Home } from "lucide-react";
+import Link from "next/link";
 
 type RealTimeData = PatientFormData & {
   status: "typing" | "submitted" | "inactive";
@@ -55,8 +57,24 @@ export default function StaffView() {
     return date.toLocaleTimeString("en-US", { hour12: false });
   };
 
+  const headerName = currentPatient
+    ? [currentPatient.firstName, currentPatient.lastName]
+        .filter(Boolean)
+        .join(" ")
+    : "";
+
+  const hasName = headerName.length > 0;
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
+      <Link
+        href="/"
+        className="mb-6 flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors"
+      >
+        <Home className="w-5 h-5" />
+        <span className="text-sm font-medium">Home</span>
+      </Link>
+
       <div className="max-w-4xl mx-auto">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-8">
@@ -108,13 +126,24 @@ export default function StaffView() {
             {/* Card Header with Status */}
             <div className="bg-slate-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">
-                  {currentPatient.firstName?.[0]?.toUpperCase() || "?"}
+                {/* Avatar: ใช้ตัวอักษรแรกของชื่อ หรือ ? */}
+                <div
+                  className={`h-10 w-10 rounded-full flex items-center justify-center font-bold text-xl ${
+                    hasName
+                      ? "bg-blue-100 text-blue-600"
+                      : "bg-gray-200 text-gray-400"
+                  }`}
+                >
+                  {hasName ? headerName[0].toUpperCase() : "?"}
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-gray-900">
-                    {currentPatient.firstName || "Unknown"}{" "}
-                    {currentPatient.lastName}
+                  {/* Title: โชว์ชื่อผสม หรือ "New Patient" */}
+                  <h2
+                    className={`text-lg font-bold ${
+                      hasName ? "text-gray-900" : "text-gray-400 italic"
+                    }`}
+                  >
+                    {hasName ? headerName : "New Patient"}
                   </h2>
                   <p className="text-xs text-gray-500">
                     Last updated: {lastUpdated ? formatTime(lastUpdated) : "-"}
@@ -163,12 +192,12 @@ export default function StaffView() {
 
             {/* Form Data Grid */}
             <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <DataField label="First Name" value={currentPatient.firstName} />
               <DataField
-                label="Full Name"
-                value={`${currentPatient.firstName} ${
-                  currentPatient.middleName || ""
-                } ${currentPatient.lastName}`}
+                label="Middle Name"
+                value={currentPatient.middleName}
               />
+              <DataField label="Last Name" value={currentPatient.lastName} />
               <DataField
                 label="Date of Birth"
                 value={currentPatient.dateOfBirth}
