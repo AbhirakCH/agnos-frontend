@@ -1,43 +1,52 @@
 # Agnos Candidate Assignment: Patient Form & Staff View
 
-This project is a real-time synchronized application comprising a **Patient Form** for data entry and a **Staff View** for monitoring submissions. It is built with **Next.js 16**, **Tailwind CSS 4**, and **Pusher** for WebSocket-based updates.
+Live Demo: [https://agnos-frontend-henna.vercel.app/](https://agnos-frontend-henna.vercel.app/)
 
-## Features
+This project is a real-time synchronized application comprising a **Patient Form** for data entry and a **Staff View** for monitoring submissions. It demonstrates modern web development practices using **Next.js 15**, **Tailwind CSS**, and **Pusher** for WebSocket-based updates.
+
+## 🚀 Features
 
 - **Patient Form**:
-  - Responsive input form with validation (Zod + React Hook Form).
-  - Collects personal details, contact info, and preferences.
-- **Staff View**:
-  - Real-time updates as patients type or submit data.
-  - Status indicators for active filling and submission state.
-- **Real-Time Synchronization**:
-  - Instantly reflects changes from the Patient Form to the Staff View using Pusher Channels.
+  - Responsive input form with robust validation using **Zod** and **React Hook Form**.
+  - User-friendly interface for collecting personal details, contact info, and preferences.
+- **Staff View Dashboard**:
+  - **Real-time Synchronization**: Instantly reflects changes from the Patient Form as they happen (typing status, form submission).
+  - **Live Status Indicators**: Visual cues for active filling and submission states.
+- **Architecture**:
+  - Event-driven architecture using Pusher Channels to broadcast updates from Server-to-Client instantly without polling.
 
-## Tech Stack
+## 🛠 Tech Stack
 
 - **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
 - **Language**: TypeScript
-- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
-- **Real-time**: [Pusher](https://pusher.com/)
-- **Form Handling**: [React Hook Form](https://react-hook-form.com/)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/) (Beta)
+- **Real-time Engine**: [Pusher Channels](https://pusher.com/)
+- **Form Management**: [React Hook Form](https://react-hook-form.com/)
 - **Validation**: [Zod](https://zod.dev/)
 - **Icons**: [Lucide React](https://lucide.dev/)
 
-## Prerequisites
+## ⚠️ Data Persistence Disclaimer
 
-- Node.js 18+ installed.
-- A [Pusher](https://pusher.com/) account (Channels).
+**Note:** This is a frontend demonstration focused on UX and Real-time capabilities.
 
-## Getting Started
+- Data submitted is processed for real-time display but **is not currently persisted** to a permanent database.
+- Refreshing the Staff View page may reset the list of submissions.
 
-1.  **Clone the repository** (if applicable) and install dependencies:
+## 📦 Prerequisites
+
+Before running locally, ensure you have:
+
+- Node.js 20+ installed.
+- A [Pusher](https://pusher.com/) account (for API Keys).
+
+## 💻 Getting Started
+
+1.  **Clone the repository** and install dependencies:
 
     ```bash
+    git clone [your-repo-link]
+    cd [your-repo-name]
     npm install
-    # or
-    yarn install
-    # or
-    pnpm install
     ```
 
 2.  **Environment Configuration**:
@@ -51,8 +60,6 @@ This project is a real-time synchronized application comprising a **Patient Form
     NEXT_PUBLIC_PUSHER_CLUSTER="your_app_cluster"
     ```
 
-    > **Note**: These keys can be found in your Pusher Dashboard under App Keys.
-
 3.  **Run the Development Server**:
 
     ```bash
@@ -61,13 +68,23 @@ This project is a real-time synchronized application comprising a **Patient Form
 
     Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-## Usage
+## 📖 Usage Guide
 
-- **Patient Form**: Navigate to `http://localhost:3000/patient-form` to access the input form.
-- **Staff View**: Open `http://localhost:3000/staff-view` in a separate window or tab to monitor real-time updates.
+To test the real-time functionality locally:
 
-## Project Structure
+1.  Open `http://localhost:3000/staff-view` in one window (Staff Dashboard).
+2.  Open `http://localhost:3000/patient-form` in a **separate window or incognito tab** (Patient Input).
+3.  Start typing in the Patient Form and watch the Staff View update instantly!
 
-- `app/patient-form`: Contains the page and logic for the patient input form.
-- `app/staff-view`: Contains the real-time dashboard for staff members.
-- `lib/pusher.ts`: Pusher configuration and server instance.
+## 📂 Project Structure
+
+```text
+├── app/
+│   ├── patient-form/    # Patient input page logic
+│   ├── staff-view/      # Staff dashboard with real-time listeners
+│   └── api/pusher/      # API Route for triggering Pusher events
+├── components/          # Reusable UI components
+├── lib/
+│   └── pusher.ts        # Pusher instance configuration
+└── public/              # Static assets
+```
