@@ -8,10 +8,6 @@ import { Home } from "lucide-react";
 import Link from "next/link";
 
 export default function PatientForm() {
-  const maxDate = new Date();
-  maxDate.setFullYear(maxDate.getFullYear() - 5);
-  const maxDateString = maxDate.toISOString().split("T")[0];
-
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   // Initialize form with Zod resolver
@@ -85,7 +81,6 @@ export default function PatientForm() {
               timestamp: new Date().toISOString(),
             }),
           });
-          console.log("Synced to staff view");
         } catch (error) {
           console.error("Sync failed:", error);
         }
@@ -173,8 +168,6 @@ export default function PatientForm() {
               </label>
               <input
                 type="date"
-                max={maxDateString}
-                onKeyDown={(e) => e.preventDefault()}
                 {...register("dateOfBirth")}
                 className="cursor-pointer mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />

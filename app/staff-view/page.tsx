@@ -40,7 +40,6 @@ export default function StaffView() {
 
     // Bind Event "patient-update"
     channel.bind("patient-update", (data: RealTimeData) => {
-      console.log("Received update:", data);
       setCurrentPatient(data);
       setLastUpdated(new Date());
     });
@@ -101,7 +100,6 @@ export default function StaffView() {
 
         {/* Content Section */}
         {!currentPatient ? (
-          // State: Waiting for data
           <div className="bg-white rounded-xl shadow-sm p-12 text-center border-2 border-dashed border-gray-300">
             <div className="mx-auto h-12 w-12 text-gray-400 mb-4">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -121,12 +119,9 @@ export default function StaffView() {
             </p>
           </div>
         ) : (
-          // State: Displaying Data
           <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-            {/* Card Header with Status */}
             <div className="bg-slate-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
               <div className="flex items-center gap-3">
-                {/* Avatar: ใช้ตัวอักษรแรกของชื่อ หรือ ? */}
                 <div
                   className={`h-10 w-10 rounded-full flex items-center justify-center font-bold text-xl ${
                     hasName
@@ -137,7 +132,6 @@ export default function StaffView() {
                   {hasName ? headerName[0].toUpperCase() : "?"}
                 </div>
                 <div>
-                  {/* Title: โชว์ชื่อผสม หรือ "New Patient" */}
                   <h2
                     className={`text-lg font-bold ${
                       hasName ? "text-gray-900" : "text-gray-400 italic"
@@ -151,7 +145,6 @@ export default function StaffView() {
                 </div>
               </div>
 
-              {/* Status Badge Logic */}
               <div
                 className={`px-4 py-1.5 rounded-full text-sm font-semibold shadow-sm flex items-center gap-2 border ${
                   currentPatient.status === "typing"
@@ -161,15 +154,12 @@ export default function StaffView() {
                     : "bg-gray-100 text-gray-700 border-gray-200"
                 }`}
               >
-                {/* Icon: Typing (Animation) */}
                 {currentPatient.status === "typing" && (
                   <span className="relative flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
                   </span>
                 )}
-
-                {/* Icon: Submitted (Checkmark) */}
                 {currentPatient.status === "submitted" && (
                   <svg
                     className="w-4 h-4"
