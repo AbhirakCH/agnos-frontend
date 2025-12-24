@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Agnos Candidate Assignment: Patient Form & Staff View
+
+This project is a real-time synchronized application comprising a **Patient Form** for data entry and a **Staff View** for monitoring submissions. It is built with **Next.js 16**, **Tailwind CSS 4**, and **Pusher** for WebSocket-based updates.
+
+## Features
+
+- **Patient Form**:
+  - Responsive input form with validation (Zod + React Hook Form).
+  - Collects personal details, contact info, and preferences.
+- **Staff View**:
+  - Real-time updates as patients type or submit data.
+  - Status indicators for active filling and submission state.
+- **Real-Time Synchronization**:
+  - Instantly reflects changes from the Patient Form to the Staff View using Pusher Channels.
+
+## Tech Stack
+
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
+- **Language**: TypeScript
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **Real-time**: [Pusher](https://pusher.com/)
+- **Form Handling**: [React Hook Form](https://react-hook-form.com/)
+- **Validation**: [Zod](https://zod.dev/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+
+## Prerequisites
+
+- Node.js 18+ installed.
+- A [Pusher](https://pusher.com/) account (Channels).
 
 ## Getting Started
 
-First, run the development server:
+1.  **Clone the repository** (if applicable) and install dependencies:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+    ```bash
+    npm install
+    # or
+    yarn install
+    # or
+    pnpm install
+    ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2.  **Environment Configuration**:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+    Create a `.env.local` file in the root directory and add your Pusher credentials:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+    ```env
+    PUSHER_APP_ID="your_app_id"
+    NEXT_PUBLIC_PUSHER_KEY="your_app_key"
+    PUSHER_SECRET="your_app_secret"
+    NEXT_PUBLIC_PUSHER_CLUSTER="your_app_cluster"
+    ```
 
-## Learn More
+    > **Note**: These keys can be found in your Pusher Dashboard under App Keys.
 
-To learn more about Next.js, take a look at the following resources:
+3.  **Run the Development Server**:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    ```bash
+    npm run dev
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+    Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-## Deploy on Vercel
+## Usage
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Patient Form**: Navigate to `http://localhost:3000/patient-form` to access the input form.
+- **Staff View**: Open `http://localhost:3000/staff-view` in a separate window or tab to monitor real-time updates.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project Structure
+
+- `app/patient-form`: Contains the page and logic for the patient input form.
+- `app/staff-view`: Contains the real-time dashboard for staff members.
+- `lib/pusher.ts`: Pusher configuration and server instance.
